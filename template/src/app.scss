@@ -1,0 +1,16 @@
+@use './font/iconfont';
+@use 'weui-miniprogram/miniprogram_dist/weui-wxss/dist/style/weui';
+.container {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 200px 0;
+  background-color: $theme;
+}
+.iconfont{
+  color: rebeccapurple;
+  font-size: 200px;
+}

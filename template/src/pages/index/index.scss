@@ -1,0 +1,26 @@
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $theme;
+
+  &-avatar {
+    width: 128px;
+    height: 128px;
+    margin: 20px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  &-avatar-s {
+    width: 128px;
+    height: 128px;
+    margin: 20px;
+    overflow: hidden;
+  }
+  &-dd {
+    border-radius: 50%;
+  }
+}
+.usermotto {
+  margin-top: 300px;
+}
