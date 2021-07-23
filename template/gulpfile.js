@@ -188,7 +188,7 @@ const copy = () => {
 };
 const libwxss = () => {
   return gulp
-    .src(['node_modules/weui-miniprogram/miniprogram_dist/weui-wxss/dist/style/weui.wxss'], { base: './' })
+    .src(['node_modules/weui-miniprogram/miniprogram_dist/weui-wxss/dist/style/weui.wxss'], { base: './', allowEmpty: true })
     .pipe(gulpPlugins.rename({ extname: '.css' }))
     .pipe(gulp.dest('.'));
 };
@@ -224,11 +224,11 @@ const watch = () => {
 const dev = gulp.series(
   gulp.parallel(clear, clearCache),
   font,
-  gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style),
+  gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style, libwxss),
   mconfig,
   watch
 );
-const build = gulp.series(clear, font, gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style), mconfig);
+const build = gulp.series(clear, font, gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style, libwxss), mconfig);
 
 module.exports = {
   image,
