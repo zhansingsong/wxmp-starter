@@ -1,19 +1,23 @@
 {
   "name": "wxmp-starter",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "小程序开发脚手架",
+  "main": "./bin/starter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
     "wxmp-starter": "./bin/starter.js"
   },
-  "author": "",
+  "files": [
+    "template",
+    "project.config.json"
+  ],
+  "author": "zhansingsong",
+  "email": "zhansingsong@gmail.com",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.1",
-    "commander": "^8.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.1.2",
     "ora": "^5.4.1"
