@@ -1,6 +1,6 @@
 {
   "name": "wxmp-starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "小程序开发脚手架",
   "main": "./bin/starter.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "wxmp-starter": "./bin/starter.js"
   },
   "files": [
+    "bin",
     "template",
     "project.config.json"
   ],
