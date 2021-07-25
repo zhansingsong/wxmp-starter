@@ -5,11 +5,11 @@
 基于 gulp 搭建，满足小程序基本开发所有需求 🖥。
 
 - 🚀 轻量极速构建
-- 🧰 支持 `TypeScript` `SASS`
+- 🎨 支持 `TypeScript` `SASS`
 - 🔍 代码检测
 - 🎈 font icon
 - 🗃 自动化 npm 构建
-- 🌁 图片压缩
+- 🏞 图片压缩
 
 ## 快速开始
 

@@ -5,11 +5,11 @@
         <view slot="extend">
             <view class="fetures">
                 <view>🚀 轻量极速构建</view>
-                <view>😀 支持 `TypeScript` `SASS`</view>
+                <view>🎨 支持 `TypeScript` `SASS`</view>
                 <view>🔍 代码检测</view>
                 <view>🎈 font icon</view>
-                <view> 🗃 自动化 npm 构建</view>
-                <view>🌁 图片压缩</view>
+                <view>🗃 自动化 npm 构建</view>
+                <view>🏞 图片压缩</view>
             </view>
         </view>
         <view slot="handle">
