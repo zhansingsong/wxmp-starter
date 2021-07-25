@@ -6,7 +6,7 @@ const ora = require('ora');
 const inquirer = require('inquirer');
 const fs = require('fs-extra');
 
-const pkg = require('../package.json');
+// const pkg = require('../package.json');
 const projectConfig = require('../project.config.json');
 
 const generateCurrentPath = (p) => path.join(process.cwd(), p);
@@ -49,7 +49,11 @@ inquirer
   ])
   .then((answers) => {
     console.log();
-    console.log(`${chalk.bold.gray('[WXMP-STARTER]')} ${chalk.bold.greenBright('→')} ${chalk.bold('开始创建项目……')}`);
+    console.log(
+      `${chalk.bold.gray('[WXMP-STARTER]')} ${chalk.bold.greenBright(
+        '→'
+      )} ${chalk.bold('开始创建项目……')}`
+    );
     const spinner = ora({
       text: chalk.bold.blue('开始创建项目，请稍等……'),
       prefixText: chalk.bold.gray('[WXMP-STARTER]'),
@@ -59,16 +63,22 @@ inquirer
     // 生成项目目录
     try {
       const projectPath = generateProject(answers.projectName);
-      const useYarn = false //shouldUseYarn();
+      const useYarn = false; //shouldUseYarn();
 
-      fs.writeJsonSync(path.join(projectPath, 'project.config.json'), projectConfig, {spaces: 2});
+      fs.writeJsonSync(
+        path.join(projectPath, 'project.config.json'),
+        projectConfig,
+        {spaces: 2}
+      );
       fs.copySync(generatePath('../template'), projectPath);
       spinner.succeed(`初始化完项目`);
       process.chdir(projectPath);
       spinner.start(`开始安装项目依赖……`);
       execSync('npm install', {stdio: 'inherit'});
       spinner.succeed(
-        `项目创建完成 ${chalk.green.bold(projectConfig.projectname)}(${chalk.underline.gray(projectPath)})`
+        `项目创建完成 ${chalk.green.bold(
+          projectConfig.projectname
+        )}(${chalk.underline.gray(projectPath)})`
       );
       const displayedCommand = 'npm';
       console.log();
@@ -77,13 +87,19 @@ inquirer
       console.log(chalk.cyan(`  ${displayedCommand} start`));
       console.log('    启动开发环境');
       console.log();
-      console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`));
+      console.log(
+        chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
+      );
       console.log('    打包构建');
       console.log();
-      console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eslint`));
+      console.log(
+        chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eslint`)
+      );
       console.log('    lint 代码');
       console.log();
-      console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}format`));
+      console.log(
+        chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}format`)
+      );
       console.log('    格式代码');
       console.log();
       console.log('执行如下操作开始小程序开发:');
@@ -97,9 +113,10 @@ inquirer
     }
   })
   .catch((error) => {
-    if (error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
-    } else {
-      // Something else went wrong
-    }
+    console.error(error);
+    // if (error.isTtyError) {
+    //   // Prompt couldn't be rendered in the current environment
+    // } else {
+    //   // Something else went wrong
+    // }
   });
