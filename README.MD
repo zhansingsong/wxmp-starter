@@ -1,4 +1,4 @@
-# wxmp-starter 小程序开发架手架
+# wxmp-starter 小程序开发脚手架
 
 ![wxmp-starter](./gg.png)
 
