@@ -1,5 +1,7 @@
 # 小程序开发脚手架
 
+![wxmp-starter](./dist/assets/gg.png)
+
 基于 gulp 搭建，满足小程序基本开发所有需求 🖥。
 
 - 🚀 轻量极速构建

@@ -3,7 +3,7 @@
   "packOptions": {
     "ignore": []
   },
-  "miniprogramRoot": "miniprogram_dist/",
+  "miniprogramRoot": "dist",
   "compileType": "miniprogram",
   "libVersion": "2.15.0",
   "projectname": "wx-miniprogram-starter",
@@ -49,6 +49,6 @@
   },
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "appid": "touristappid",
+  "appid": "wx04daef689d7c3df5",
   "condition": {}
 }

@@ -1,26 +1,22 @@
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: $theme;
+// @import "styles";
+@use "@styles" as config;
 
-  &-avatar {
-    width: 128px;
-    height: 128px;
-    margin: 20px;
-    overflow: hidden;
-    border-radius: 50%;
+.wxmp-msg {
+  .weui-msg__title{
+    font-size: 60px;
   }
-  &-avatar-s {
-    width: 128px;
-    height: 128px;
-    margin: 20px;
-    overflow: hidden;
+  .weui-msg__desc{
+    color: rgb(229, 155, 205);
+    font-size: 30px;
   }
-  &-dd {
-    border-radius: 50%;
+  .fetures {
+    font-size: 28px;
   }
-}
-.usermotto {
-  margin-top: 300px;
+  .weui-btn {
+    border-radius: 10px;
+    font-size: 30px;
+    .iconfont{
+      font-size: 30px;
+    }
+  }
 }

@@ -1,28 +1,25 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
-  <text class="iconfont icon-female" selectable="false" space="false" decode="false">
-  </text>
-    <block wx:if="{{canIUseOpenData}}">
-      <view class="{{c ? 'userinfo-avatar-s': 'userinfo-avatar'}}" bindtap="bindViewTap">
-        <open-data type="userAvatarUrl"></open-data>
-      </view>
-      <open-data type="userNickName"></open-data>
-    </block>
-    <block wx:elif="{{!hasUserInfo}}">
-      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
-    </block>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="{{c ? 'userinfo-avatar-s': 'userinfo-avatar'}}" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-  <view class="usermotto">
-  <mp-badge content="99+" style="position: absolute;top: -.4em;right: -.4em;"/>
-    <text class="user-motto">{{motto}}</text>
-    <image src="@/assets/haha.gif" mode="cover" lazy-load="false" binderror="" bindload="">
-    </image>
-  </view>
+    <mp-msg type="" ext-class="wxmp-msg" title="wxmp-starter" icon="/assets/wxmp.svg">
+        <view slot="desc">基于 gulp 搭建，满足小程序基本开发所有需求 🖥。</view>
+        <view slot="extend">
+            <view class="fetures">
+                <view>🚀 轻量极速构建</view>
+                <view>😀 支持 `TypeScript` `SASS`</view>
+                <view>🔍 代码检测</view>
+                <view>🎈 font icon</view>
+                <view> 🗃 自动化 npm 构建</view>
+                <view>🌁 图片压缩</view>
+            </view>
+        </view>
+        <view slot="handle">
+            <button bind:tap="tapDialog" class="weui-btn" type="primary"><text class="iconfont icon-wx"></text> 微信小程序</button>
+        </view>
+        <view slot="footer">
+            <view class="weui-footer__text">Copyright © 2021 wxmp-starter</view>
+        </view>
+    </mp-msg>
+    <mp-dialog title="wxmp-starter" show="{{showDialog}}" bindbuttontap="tapDialogButton" buttons="{{oneButton}}">
+        <view>骚年！开启小程序开发之旅吧✈️</view>
+    </mp-dialog>
 </view>
