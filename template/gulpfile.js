@@ -10,6 +10,7 @@ const px2units = require('postcss-px2units');
 const cssnano = require('cssnano');
 const svg2font = require('@zhansingsong/svg2font');
 const ci = require('miniprogram-ci');
+const Fiber = require('fibers');
 
 const currentEnv = process.env.NODE_ENV;
 const gulpPlugins = require('gulp-load-plugins')();
@@ -17,11 +18,10 @@ const gulpPlugins = require('gulp-load-plugins')();
 const jsonfile = require('jsonfile');
 
 const resolve = (...args) => path.resolve(__dirname, ...args);
-
 // config
 const config = {
   src: 'src',
-  dist: 'miniprogram_dist',
+  dist: 'dist',
   alias: {
     paths: {
       '@': path.join(__dirname, 'src'),
@@ -32,7 +32,6 @@ const config = {
   },
   sourcemap: currentEnv === 'development',
 };
-
 // 文件匹配路径
 const globs = {
   ts: `${config.src}/**/*.{ts, tsx}`, // 匹配 ts 文件
@@ -57,23 +56,26 @@ globs.copy = [
 const clearCache = () => gulpPlugins.cache.clearAll();
 
 const clear = () => del(config.dist, { dot: true });
-
+// 实现增量构建：跳过自上次成功完成任务以来没有更改的文件
+const since = (task) => (file) => {
+  return gulp.lastRun(task) > file.stat.ctime ? gulp.lastRun(task) : 0;
+};
+// https://github.com/ivogabe/gulp-typescript#incremental-compilation
+const tsProject = gulpPlugins.typescript.createProject('tsconfig.json');
 const ts = () => {
-  const tsProject = gulpPlugins.typescript.createProject('tsconfig.json');
   return (
     tsProject
       .src()
-      // .pipe(gulpPlugins.changed(config.dist))
-      .pipe(gulpPlugins.newer(config.dist))
+      .pipe(gulpPlugins.changed(config.dist))
+      // .pipe(gulpPlugins.newer(config.dist))
       .pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.init()))
-      .pipe(gulpPlugins.pathAlias(config.alias))
+      .pipe(gulpPlugins.zhansingsong.pathAlias(config.alias))
       .pipe(tsProject())
       .js.pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.write('.')))
       .pipe(gulpPlugins.size({ title: '脚本' }))
       .pipe(gulp.dest(config.dist))
   );
 };
-
 const style = () => {
   const plugins = [autoprefixer(), px2units()];
   if (currentEnv !== 'development') {
@@ -83,24 +85,25 @@ const style = () => {
   return (
     gulp
       .src([globs.scss, `!${config.src}/styles/*.scss`, `!${config.src}/font/*.scss`])
-      // 插入公共样式
-      .pipe(gulpPlugins.header(['/* inject:scss */', '/* endinject */'].join('\n')))
-      .pipe(
-        gulpPlugins.inject(gulp.src([`${config.src}/styles/index.scss`], { read: false }), {
-          relative: true,
-          removeTags: true,
-          transform: function (filepath) {
-            return `@use "${filepath}" as *;\n`;
-            // Use the default transform as fallback:
-            // return gulpPlugins.inject.transform.apply(gulpPlugins.inject.transform, arguments);
-          },
-        })
-      )
-      // .pipe(gulpPlugins.changed(config.dist))
+      .pipe(gulpPlugins.changed(config.dist))
       // .pipe(gulpPlugins.newer(config.dist))
+      // {since: since(style)} 增量编译可能导致关联样式不能实时生效
+      // 插入公共样式：该插入可能会导致编译速度变慢。可根据实际情况开启，开启时需要去掉{since: since(style)}
+      // .pipe(gulpPlugins.header(['/* inject:scss */', '/* endinject */'].join('\n')))
+      // .pipe(
+      //   gulpPlugins.inject(gulp.src([`${config.src}/styles/index.scss`], { read: false }), {
+      //     relative: true,
+      //     removeTags: true,
+      //     transform: function (filepath) {
+      //       return `@use "${filepath}" as *;\n`;
+      //       // Use the default transform as fallback:
+      //       // return gulpPlugins.inject.transform.apply(gulpPlugins.inject.transform, arguments);
+      //     },
+      //   })
+      // )
       .pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.init()))
-      .pipe(gulpPlugins.pathAlias(config.alias))
-      .pipe(sassPlugin({ includePaths: ['node_modules'] }).on('error', sassPlugin.logError))
+      .pipe(gulpPlugins.zhansingsong.pathAlias(config.alias))
+      .pipe(sassPlugin({ includePaths: ['node_modules'], fiber: Fiber }).on('error', sassPlugin.logError))
       .pipe(gulpPlugins.postcss(plugins))
       // https://github.com/gulp-sourcemaps/gulp-sourcemaps/issues/60
       // .pipe(sourcemaps.write({ includeContent: false }))
@@ -119,7 +122,7 @@ const style = () => {
 const lint = () => {
   return (
     gulp
-      .src([globs.ts, `!${globs.typings}`])
+      .src([globs.ts, `!${globs.typings}`], { since: since(lint) })
       // eslint() attaches the lint output to the "eslint" property
       // of the file object so it can be used by other modules.
       .pipe(gulpPlugins.eslint())
@@ -159,16 +162,16 @@ const font = (cb) => {
 };
 const wxml = () => {
   return gulp
-    .src([globs.wxml])
+    .src([globs.wxml], { since: since(wxml) })
     .pipe(gulpPlugins.changed(config.dist))
-    .pipe(gulpPlugins.pathAlias(config.alias))
+    .pipe(gulpPlugins.zhansingsong.pathAlias(config.alias))
     .pipe(gulpPlugins.size({ title: 'wxml' }))
     .pipe(gulp.dest(config.dist));
 };
 
 const image = () => {
   return gulp
-    .src([globs.image, `!${config.src}/font/svg2font/*.svg`])
+    .src([globs.image, `!${config.src}/font/svg2font/*.svg`], { since: since(image) })
     .pipe(gulpPlugins.changed(config.dist))
     .pipe(
       gulpPlugins.imagemin({
@@ -182,13 +185,17 @@ const image = () => {
 
 const copy = () => {
   return gulp
-    .src(globs.copy)
+    .src(globs.copy, { since: since(copy) })
     .pipe(gulpPlugins.size({ title: '拷贝' }))
     .pipe(gulp.dest(config.dist));
 };
 const libwxss = () => {
   return gulp
-    .src(['node_modules/weui-miniprogram/miniprogram_dist/weui-wxss/dist/style/weui.wxss'], { base: './', allowEmpty: true })
+    .src(['node_modules/weui-miniprogram/miniprogram_dist/weui-wxss/dist/style/weui.wxss'], {
+      base: './',
+      allowEmpty: true,
+      since: since(libwxss),
+    })
     .pipe(gulpPlugins.rename({ extname: '.css' }))
     .pipe(gulp.dest('.'));
 };
@@ -196,7 +203,7 @@ const libwxss = () => {
 const npm = () => {
   return ci.packNpmManually({
     packageJsonPath: './package.json',
-    miniprogramNpmDistDir: './miniprogram_dist/',
+    miniprogramNpmDistDir: `./${config.dist}/`,
   });
 };
 // 将 miniprogramRoot 配置修改为 dist 路径
@@ -218,17 +225,18 @@ const watch = () => {
   gulp.watch(globs.scss, style);
   gulp.watch(globs.wxml, wxml);
   gulp.watch(globs.image, image);
-  gulp.watch('./package-lock.json', {events: ['change']}, npm);
+  gulp.watch('./package-lock.json', { events: ['change'] }, npm);
 };
 
 const dev = gulp.series(
   gulp.parallel(clear, clearCache),
   font,
-  gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style, libwxss),
+  libwxss,
+  gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style),
   mconfig,
   watch
 );
-const build = gulp.series(clear, font, gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style, libwxss), mconfig);
+const build = gulp.series(clear, font, libwxss, gulp.parallel(copy, npm, image, wxml, gulp.series(lint, ts), style), mconfig);
 
 module.exports = {
   image,

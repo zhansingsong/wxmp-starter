@@ -2,13 +2,16 @@
 const {execSync} = require('child_process');
 const chalk = require('chalk');
 const path = require('path');
-const pkg = require('../package.json');
+const ora = require('ora');
 const inquirer = require('inquirer');
-const projectConfig = require('../project.config.json');
 const fs = require('fs-extra');
+
+const pkg = require('../package.json');
+const projectConfig = require('../project.config.json');
+
 const generateCurrentPath = (p) => path.join(process.cwd(), p);
 const generatePath = (p) => path.resolve(__dirname, p);
-const ora = require('ora');
+
 function shouldUseYarn() {
   try {
     execSync('yarnpkg --version', {stdio: 'ignore'});
