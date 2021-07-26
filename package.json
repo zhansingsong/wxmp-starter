@@ -1,6 +1,6 @@
 {
   "name": "wxmp-starter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "小程序开发脚手架",
   "main": "./bin/starter.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "project.config.json",
     "wx.png"
   ],
+  "keywords": ["微信小程序", "开发脚手架"],
   "author": "zhansingsong",
   "email": "zhansingsong@gmail.com",
   "license": "ISC",
