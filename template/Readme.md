@@ -14,7 +14,7 @@
 ## 快速开始
 
 ```js
- npx -p wxmp-starter wxmp-starter
+ npx -p wxmp-starter@latest wxmp-starter
 ```
 
 ## 开发相关命令

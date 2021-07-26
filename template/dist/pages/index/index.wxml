@@ -1,0 +1,25 @@
+<!--index.wxml-->
+<view class="container">
+    <mp-msg type="" ext-class="wxmp-msg" title="wxmp-starter" icon="/assets/wxmp.svg">
+        <view slot="desc">基于 gulp 搭建，满足小程序基本开发所有需求 🖥。</view>
+        <view slot="extend">
+            <view class="fetures">
+                <view>🚀 轻量极速构建</view>
+                <view>🎨 支持 `TypeScript` `SASS`</view>
+                <view>🔍 代码检测</view>
+                <view>🎈 font icon</view>
+                <view>🗃 自动化 npm 构建</view>
+                <view>🏞 图片压缩</view>
+            </view>
+        </view>
+        <view slot="handle">
+            <button bind:tap="tapDialog" class="weui-btn" type="primary"><text class="iconfont icon-wx"></text> 微信小程序</button>
+        </view>
+        <view slot="footer">
+            <view class="weui-footer__text">Copyright © 2021 wxmp-starter</view>
+        </view>
+    </mp-msg>
+    <mp-dialog title="wxmp-starter" show="{{showDialog}}" bindbuttontap="tapDialogButton" buttons="{{oneButton}}">
+        <view>骚年！开启小程序开发之旅吧✈️</view>
+    </mp-dialog>
+</view>

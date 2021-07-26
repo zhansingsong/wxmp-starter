@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "cross-env NODE_ENV=development gulp",
-    "buid": "cross-env NODE_ENV=production gulp build",
+    "build": "cross-env NODE_ENV=production gulp build",
     "eslint": "eslint src/. --ext js,jsx,ts,tsx --fix --ignore-path .eslintignore",
     "format": "prettier --write \"**/*.{js,ts,tsx,json,css,scss,md}\""
   },

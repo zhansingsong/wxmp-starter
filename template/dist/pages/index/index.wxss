@@ -1,0 +1,17 @@
+.wxmp-msg .weui-msg__title {
+  font-size: 60rpx;
+}
+.wxmp-msg .weui-msg__desc {
+  color: #e59bcd;
+  font-size: 30rpx;
+}
+.wxmp-msg .fetures {
+  font-size: 28rpx;
+}
+.wxmp-msg .weui-btn {
+  border-radius: 10rpx;
+  font-size: 30rpx;
+}
+.wxmp-msg .weui-btn .iconfont {
+  font-size: 30rpx;
+}
