@@ -1,6 +1,6 @@
 {
   "name": "wxmp-starter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "小程序开发脚手架",
   "main": "./bin/starter.js",
   "scripts": {
@@ -12,7 +12,8 @@
   "files": [
     "bin",
     "template",
-    "project.config.json"
+    "project.config.json",
+    "wx.png"
   ],
   "author": "zhansingsong",
   "email": "zhansingsong@gmail.com",
