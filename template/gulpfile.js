@@ -71,7 +71,17 @@ const ts = () => {
       .pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.init()))
       .pipe(gulpPlugins.zhansingsong.pathAlias(config.alias))
       .pipe(tsProject())
-      .js.pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.write('.')))
+      .js
+      // 更多压缩选项请参考 https://github.com/mishoo/UglifyJS#minify-options
+      .pipe((gulpPlugins.if(currentEnv === 'production', gulpPlugins.uglify({
+        compress: {
+          // 删除 console 函数
+          drop_console: true,
+          // 删除特定函数
+          // pure_funcs: ['console.log']
+        }
+      }))))
+      .pipe(gulpPlugins.if(config.sourcemap, gulpPlugins.sourcemaps.write('.')))
       .pipe(gulpPlugins.size({ title: '脚本' }))
       .pipe(gulp.dest(config.dist))
   );

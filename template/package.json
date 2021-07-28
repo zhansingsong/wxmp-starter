@@ -42,6 +42,7 @@
     "gulp-size": "^4.0.1",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
+    "gulp-uglify": "^3.0.2",
     "husky": "^7.0.1",
     "jsonfile": "^6.1.0",
     "miniprogram-ci": "^1.4.13",
